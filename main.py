@@ -6,7 +6,7 @@ from worker_win import FileTransferWindow
 from Downloader import DownloadWindow
 
 class MainWindow(QMainWindow):
-    remote="https://www.python.org/ftp/python/3.7.2/python-3.7.2.exe"
+    remote="https://www.python.org/ftp/python/3.7.2/python-3.7.2."
     local="python-3.7.2.exe"
     def __init__(self):
         super().__init__()
@@ -19,10 +19,14 @@ class MainWindow(QMainWindow):
         if self.w is None:
             self.w = DownloadWindow(download_url=self.remote, localfile=self.local)# FileTransferWindow()
             self.w.show()
+            # connect to the signals emitted by the class
             self.w.signal_startDownload.connect(self.downloadStarted)
             self.w.signal_DownloadSucceeded.connect(self.downloadSucceeded)
             self.w.signal_DownloadFinshed.connect(self.downloadFinished)
             self.w.signal_DownloadStarted.connect(self.downloadStarted)
+            self.w.signal_DownloadFinshed.connect(self.download_finished)
+            self.w.signal_DownloadFailed.connect(self.downloadFailed)
+            # start the download
             self.w.startDownload()
 
         else:
@@ -30,6 +34,15 @@ class MainWindow(QMainWindow):
             self.w.close()  # Close window.
             self.w = None  # Discard reference.
 
+    def downloadFailed(self, reason:str):
+      print("MainWindow: downloadFailed, reason="+reason)
+      pass
+     
+
+    def download_finished(self):
+      print("MainWindow: downloadFinished")
+      pass
+     
     def downloadStarted(self):
       print("MainWindow: downloadStarted")
       pass
@@ -41,6 +54,14 @@ class MainWindow(QMainWindow):
       self.w.close()
       self.w=None
       pass
+
+    ## close downloader win if any
+    def closeEvent(self, event):
+        # do stuff
+      if self.w!=None:
+        self.w.close()
+      event.accept()
+      #event.ignore()
 
 app = QApplication(sys.argv)
 w = MainWindow()
