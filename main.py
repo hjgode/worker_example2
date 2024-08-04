@@ -6,7 +6,7 @@ from worker_win import FileTransferWindow
 from Downloader import DownloadWindow
 
 class MainWindow(QMainWindow):
-    remote="https://www.python.org/ftp/python/3.7.2/python-3.7.2."
+    remote="https://www.python.org/ftp/python/3.7.2/python-3.7.2.exe"
     local="python-3.7.2.exe"
     def __init__(self):
         super().__init__()

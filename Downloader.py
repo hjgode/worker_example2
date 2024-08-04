@@ -1,7 +1,7 @@
 from urllib.request import urlopen
 
 from PyQt5.QtCore import QThread, pyqtSignal, QMutex, Qt #, AlignmentFlag
-from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QPushButton, QVBoxLayout
 from PyQt5.QtWidgets import QProgressBar
 
 
@@ -81,7 +81,7 @@ class Downloader(QThread):
           self.signal_failed.emit("Exception: " + str(ex))
 
 
-class DownloadWindow(QMainWindow):
+class DownloadWindow(QWidget):
     # Signal for the caller window to establish the maximum value
     # of the progress bar.
     signal_startDownload = pyqtSignal(int)
@@ -120,7 +120,7 @@ class DownloadWindow(QMainWindow):
         layout.addWidget(self.progressBar, 1, Qt.AlignmentFlag.AlignCenter)
         self.setLayout(layout)
         layout.setStretchFactor(self.label,3)
-        
+
     def stopDownload(self):
         print("stopDownload called")
         if self.downloader!=None:
